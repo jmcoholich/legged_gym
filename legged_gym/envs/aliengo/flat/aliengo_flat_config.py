@@ -5,6 +5,7 @@ from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobot
 class AliengoFlatCfg(LeggedRobotCfg):
     class init_state(LeggedRobotCfg.init_state):
         pos = [0.0, 0.0, 0.48]  # x,y,z [m]
+        # pos = [0.0, 0.0, 1.48]  # x,y,z [m]
         # pos = [0.0, 0.0, 10.0]  # x,y,z [m]
         # rot = [0.707, 0, 0, 0.707]
         # default_joint_angles = {  # = target angles [rad] when action = 0.0
@@ -35,8 +36,8 @@ class AliengoFlatCfg(LeggedRobotCfg):
         default_joint_angles = {  # = target angles [rad] when action = 0.0
             'FL_hip_joint': hip,   # [rad]
             'RL_hip_joint': hip,   # [rad]
-            'FR_hip_joint': hip,  # [rad]
-            'RR_hip_joint': hip,   # [rad]
+            'FR_hip_joint': -hip,  # [rad]
+            'RR_hip_joint': -hip,   # [rad]
 
             'FL_thigh_joint': thigh,     # [rad]
             'RL_thigh_joint': thigh,   # [rad]
@@ -53,24 +54,34 @@ class AliengoFlatCfg(LeggedRobotCfg):
     class terrain(LeggedRobotCfg.terrain):
         mesh_type = "plane"
 
+    # viewer camera:
+    class viewer(LeggedRobotCfg.viewer):
+        ref_env = 0
+        pos = [0, 3, 1.5]  # [m]
+        lookat = [0, 0, 0.25]  # [m]
+
     class control(LeggedRobotCfg.control):
         # PD Drive parameters:
         control_type = 'P'
-        stiffness = {'joint': 20.}  # [N*m/rad]
+        stiffness = {'joint': 100.}  # [N*m/rad]
         damping = {'joint': 0.5}     # [N*m*s/rad]
         # action scale: target angle = actionScale * action + defaultAngle
-        action_scale = 1.0
+        action_scale = 0.25
         # decimation: Number of control action updates @ sim DT per policy DT
         decimation = 4
 
     class asset(LeggedRobotCfg.asset):
         file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/aliengo/urdf/aliengo.urdf'
+        # flip_visual_attachments = False
+
         name = "Aliengo"
         foot_name = "foot"
         penalize_contacts_on = ["thigh", "calf"]
+        # terminate_after_contacts_on = ["base", "trunk", "thigh", "calf"]
         terminate_after_contacts_on = ["base", "trunk"]
         self_collisions = 0  # 1 to disable, 0 to enable...bitwise filter
-        flip_visual_attachments = False
+        # fix_base_link = True
+        # disable_gravity = True
 
     class rewards(LeggedRobotCfg.rewards):
         soft_dof_pos_limit = 0.9

@@ -33,6 +33,7 @@ from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobot
 class A1RoughCfg( LeggedRobotCfg ):
     class init_state( LeggedRobotCfg.init_state ):
         pos = [0.0, 0.0, 0.42] # x,y,z [m]
+        # pos = [0.0, 0.0, 1.42] # x,y,z [m]
         default_joint_angles = { # = target angles [rad] when action = 0.0
             'FL_hip_joint': 0.1,   # [rad]
             'RL_hip_joint': 0.1,   # [rad]
@@ -60,6 +61,15 @@ class A1RoughCfg( LeggedRobotCfg ):
         # decimation: Number of control action updates @ sim DT per policy DT
         decimation = 4
 
+    # class terrain(LeggedRobotCfg.terrain):
+    #     mesh_type = "plane"    
+
+    # # viewer camera:
+    # class viewer(LeggedRobotCfg.viewer):
+    #     ref_env = 0
+    #     pos = [0, 3, 1.5]  # [m]
+    #     lookat = [0, 0, 0.25]  # [m]
+
     class asset( LeggedRobotCfg.asset ):
         file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/a1/urdf/a1.urdf'
         name = "a1"
@@ -67,7 +77,9 @@ class A1RoughCfg( LeggedRobotCfg ):
         penalize_contacts_on = ["thigh", "calf"]
         terminate_after_contacts_on = ["base"]
         self_collisions = 1 # 1 to disable, 0 to enable...bitwise filter
-  
+        # fix_base_link = True
+        # disable_gravity = True
+
     class rewards( LeggedRobotCfg.rewards ):
         soft_dof_pos_limit = 0.9
         base_height_target = 0.25
