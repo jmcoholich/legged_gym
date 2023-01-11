@@ -66,7 +66,7 @@ class AliengoFlatCfg(LeggedRobotCfg):
         stiffness = {'joint': 100.}  # [N*m/rad]
         damping = {'joint': 0.5}     # [N*m*s/rad]
         # action scale: target angle = actionScale * action + defaultAngle
-        action_scale = 0.25
+        action_scale = 0.15
         # decimation: Number of control action updates @ sim DT per policy DT
         decimation = 4
 
@@ -77,19 +77,32 @@ class AliengoFlatCfg(LeggedRobotCfg):
         name = "Aliengo"
         foot_name = "foot"
         penalize_contacts_on = ["thigh", "calf"]
-        # terminate_after_contacts_on = ["base", "trunk", "thigh", "calf"]
-        terminate_after_contacts_on = ["base", "trunk"]
+        terminate_after_contacts_on = ["base", "trunk", "thigh", "calf"]
+        # terminate_after_contacts_on = ["base", "trunk"]
         self_collisions = 0  # 1 to disable, 0 to enable...bitwise filter
         # fix_base_link = True
         # disable_gravity = True
+    
+    class domain_rand(LeggedRobotCfg.domain_rand):
+        randomize_friction = True
+        friction_range = [0.5, 1.5]
+        # randomize_base_mass = False
+        # added_mass_range = [-1., 1.]
+        push_robots = True
+        push_interval_s = 15
+        max_push_vel_xy = 1.
 
     class rewards(LeggedRobotCfg.rewards):
         soft_dof_pos_limit = 0.9
-        base_height_target = 0.25
+        base_height_target = 0.35
+        max_contact_force = 500 
+        # only_positive_rewards = False
 
         class scales(LeggedRobotCfg.rewards.scales):
-            torques = -0.0002
+            torques = -0.00002
             dof_pos_limits = -10.0
+            feet_air_time = 2.0
+            # orientation = -5.0
 
 class AliengoFlatCfgPPO(LeggedRobotCfgPPO):
     class algorithm(LeggedRobotCfgPPO.algorithm):
