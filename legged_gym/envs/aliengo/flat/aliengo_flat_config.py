@@ -50,9 +50,23 @@ class AliengoFlatCfg(LeggedRobotCfg):
             'RR_calf_joint': knee,    # [rad]
         }
 
+    class env(LeggedRobotCfg.env):
+        env_spacing = 0.75  # not used with heightfields/trimeshes 
+        num_observations = 48
 
     class terrain(LeggedRobotCfg.terrain):
-        mesh_type = "plane"
+        # mesh_type = "plane" # "heightfield" # none, plane, heightfield or trimesh
+        mesh_type = "trimesh" # "heightfield" # none, plane, heightfield or trimesh
+        terrain_kwargs = {'type': 'random_uniform_terrain', 'terrain_kwargs': {'min_height': -0.05, 'max_height': 0.05, 'step': 0.005, 'downsampled_scale':0.2}} # Dict of arguments for selected terrain
+        selected = True # select a unique terrain type and pass all arguments
+        num_rows= 1 # number of terrain rows (levels)
+        num_cols = 1 # number of terrain cols (types)
+        horizontal_scale = 0.1 # [m]
+        vertical_scale = 0.005 # [m]
+        curriculum = False
+        terrain_length = 32
+        terrain_width = 32
+        measure_heights = False
 
     # viewer camera:
     class viewer(LeggedRobotCfg.viewer):
@@ -83,14 +97,6 @@ class AliengoFlatCfg(LeggedRobotCfg):
         # fix_base_link = True
         # disable_gravity = True
     
-    class domain_rand(LeggedRobotCfg.domain_rand):
-        randomize_friction = True
-        friction_range = [0.5, 2.0]
-        # randomize_base_mass = False
-        # added_mass_range = [-1., 1.]
-        push_robots = True
-        push_interval_s = 15
-        max_push_vel_xy = 1.
 
     class rewards(LeggedRobotCfg.rewards):
         soft_dof_pos_limit = 0.9
@@ -99,9 +105,9 @@ class AliengoFlatCfg(LeggedRobotCfg):
         # only_positive_rewards = False
 
         class scales(LeggedRobotCfg.rewards.scales):
-            torques = -0.00002
+            torques = -0.000002
             dof_pos_limits = -10.0
-            feet_air_time = 1.0
+            feet_air_time = 0.5
             # orientation = -5.0
 
 class AliengoFlatCfgPPO(LeggedRobotCfgPPO):
