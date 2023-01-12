@@ -85,7 +85,7 @@ class AliengoFlatCfg(LeggedRobotCfg):
     
     class domain_rand(LeggedRobotCfg.domain_rand):
         randomize_friction = True
-        friction_range = [0.5, 1.5]
+        friction_range = [0.5, 2.0]
         # randomize_base_mass = False
         # added_mass_range = [-1., 1.]
         push_robots = True
@@ -101,7 +101,7 @@ class AliengoFlatCfg(LeggedRobotCfg):
         class scales(LeggedRobotCfg.rewards.scales):
             torques = -0.00002
             dof_pos_limits = -10.0
-            feet_air_time = 2.0
+            feet_air_time = 1.0
             # orientation = -5.0
 
 class AliengoFlatCfgPPO(LeggedRobotCfgPPO):
@@ -111,4 +111,5 @@ class AliengoFlatCfgPPO(LeggedRobotCfgPPO):
     class runner(LeggedRobotCfgPPO.runner):
         run_name = ''
         experiment_name = 'flat_aliengo'
+        max_iterations = 15000
 
